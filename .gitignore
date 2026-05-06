@@ -1,0 +1,24 @@
+# Build folders
+/build
+/app/build
+
+# Gradle
+.gradle
+
+# Local config
+local.properties
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE (Android Studio / IntelliJ)
+.idea/
+*.iml
+
+# Keystore (IMPORTANT - never commit)
+*.jks
+*.keystore
