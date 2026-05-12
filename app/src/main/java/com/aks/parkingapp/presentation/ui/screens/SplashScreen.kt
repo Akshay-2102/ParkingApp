@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -53,7 +54,7 @@ fun SplashScreen(navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary),
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -62,7 +63,7 @@ fun SplashScreen(navController: NavController){
             modifier = Modifier
                 .scale(scale.value)
                 .alpha(alpha.value)
-                .size(140.dp)
+                .size(250.dp)
         )
     }
 

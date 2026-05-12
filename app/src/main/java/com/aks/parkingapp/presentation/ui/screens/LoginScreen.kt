@@ -51,12 +51,12 @@ fun LoginScreen(navController: NavController){
 
     Box(modifier = Modifier.fillMaxSize()){
 
-        Image(
+        /*Image(
             painter = painterResource(R.drawable.background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
-        )
+        )*/
 
 
         Scaffold(

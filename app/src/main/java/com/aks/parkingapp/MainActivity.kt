@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,12 +37,21 @@ fun SetStatusBarColor() {
     val activity = LocalContext.current as Activity
     val window = activity.window
 
-    SideEffect {
-        window.statusBarColor = Color.Transparent.toArgb()
+    val isDarkTheme = isSystemInDarkTheme()
 
-        WindowCompat.getInsetsController(window, window.decorView)?.apply {
-            isAppearanceLightStatusBars = true
-        }
+    val statusBarColor =
+        if (isDarkTheme)
+            Color.Black
+        else
+            Color.Black
+
+    SideEffect {
+
+        window.statusBarColor = statusBarColor.toArgb()
+
+        WindowCompat
+            .getInsetsController(window, window.decorView)
+            ?.isAppearanceLightStatusBars = !isDarkTheme
     }
 }
 
