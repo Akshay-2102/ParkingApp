@@ -1,8 +1,9 @@
-package com.aks.parkingapp.data.local.db
+package com.aks.parkingapp.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.aks.parkingapp.data.local.entity.VehicleEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

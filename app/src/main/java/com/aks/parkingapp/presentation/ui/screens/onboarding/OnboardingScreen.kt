@@ -34,14 +34,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.aks.parkingapp.R
 import com.aks.parkingapp.presentation.ui.screens.onboarding.OnboardingPage
+import com.aks.parkingapp.presentation.ui.screens.onboarding.OnboardingViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState(pageCount = { 3 })
     val scope = rememberCoroutineScope()
@@ -122,6 +125,7 @@ fun OnboardingScreen(
                 .align(Alignment.TopEnd)
                 .padding(16.dp)
                 .clickable {
+                    viewModel.completeOnboarding()
                     onFinish()
                 }
         )
@@ -167,6 +171,7 @@ fun OnboardingScreen(
             Button(
                 onClick = {
                     if (pagerState.currentPage == pages.lastIndex) {
+                        viewModel.completeOnboarding()
                         onFinish()
                     } else {
                         scope.launch {

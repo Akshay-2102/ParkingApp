@@ -4,8 +4,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.aks.parkingapp.data.local.db.AppDatabase
-import com.aks.parkingapp.data.local.db.VehicleDao
-import com.aks.parkingapp.data.local.db.VehicleEntity
+import com.aks.parkingapp.data.local.dao.VehicleDao
+import com.aks.parkingapp.data.local.entity.VehicleEntity
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

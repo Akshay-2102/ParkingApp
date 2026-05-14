@@ -1,6 +1,6 @@
 package com.aks.parkingapp.data.mapper
 
-import com.aks.parkingapp.data.local.db.VehicleEntity
+import com.aks.parkingapp.data.local.entity.VehicleEntity
 import com.aks.parkingapp.domain.model.Vehicle
 
 // Entity → Domain

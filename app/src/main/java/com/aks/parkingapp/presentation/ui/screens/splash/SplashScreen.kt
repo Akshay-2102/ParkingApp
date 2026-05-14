@@ -1,4 +1,4 @@
-package com.aks.parkingapp.presentation.ui.screens
+package com.aks.parkingapp.presentation.ui.screens.splash
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutBack
@@ -8,9 +8,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,18 +20,32 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aks.parkingapp.R
 import com.aks.parkingapp.presentation.navigation.Routes
-import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController){
+fun SplashScreen(
+    navController: NavController,
+    viewModel: SplashScreenViewModel = hiltViewModel()
+) {
 
-    val scale = remember { Animatable(0.6f) }
-    val alpha = remember { Animatable(0f) }
+    val destination by viewModel
+        .startDestination
+        .collectAsState()
 
+    val scale = remember {
+        Animatable(0.6f)
+    }
+
+    val alpha = remember {
+        Animatable(0f)
+    }
+
+    // Animation
     LaunchedEffect(Unit) {
+
         scale.animateTo(
             targetValue = 1f,
             animationSpec = tween(
@@ -43,11 +58,19 @@ fun SplashScreen(navController: NavController){
             targetValue = 1f,
             animationSpec = tween(600)
         )
+    }
 
-        delay(1500)
+    // Navigation
+    LaunchedEffect(destination) {
 
-        navController.navigate(Routes.ONBOARDING) {
-            popUpTo(Routes.SPLASH) { inclusive = true }
+        destination?.let {
+
+            navController.navigate(it) {
+
+                popUpTo(Routes.SPLASH) {
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -57,8 +80,11 @@ fun SplashScreen(navController: NavController){
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
+
         Image(
-            painter = painterResource(R.drawable.parking_logo),
+            painter = painterResource(
+                R.drawable.parking_logo
+            ),
             contentDescription = "Logo",
             modifier = Modifier
                 .scale(scale.value)
@@ -66,5 +92,4 @@ fun SplashScreen(navController: NavController){
                 .size(250.dp)
         )
     }
-
 }

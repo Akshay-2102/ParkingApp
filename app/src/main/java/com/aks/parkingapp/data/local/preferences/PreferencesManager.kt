@@ -10,28 +10,54 @@ class PreferencesManager @Inject constructor(
     private val prefs: SharedPreferences
 ) {
 
-    companion object {
-        private const val KEY_IS_LOGGED_IN = "is_logged_in"
-        private const val KEY_TOKEN = "auth_token"
+    // -----------------------------
+    // Generic Methods
+    // -----------------------------
+
+    private fun putString(
+        key: String,
+        value: String
+    ) {
+        prefs.edit { putString(key, value) }
     }
 
-    fun setLoggedIn(value: Boolean) {
-        prefs.edit { putBoolean(KEY_IS_LOGGED_IN, value) }
+    private fun getString(
+        key: String
+    ): String? {
+
+        return prefs.getString(key, null)
     }
 
-    fun isLoggedIn(): Boolean {
-        return prefs.getBoolean(KEY_IS_LOGGED_IN, false)
+    private fun putBoolean(
+        key: String,
+        value: Boolean
+    ) {
+        prefs.edit { putBoolean(key, value) }
     }
 
-    fun saveToken(token: String) {
-        prefs.edit { putString(KEY_TOKEN, token) }
+    private fun getBoolean(
+        key: String
+    ): Boolean {
+
+        return prefs.getBoolean(key, false)
     }
 
-    fun getToken(): String? {
-        return prefs.getString(KEY_TOKEN, null)
+    private  fun clear() {
+        prefs.edit { clear() }
     }
 
-    fun clear() {
-        prefs.edit().clear().apply()
+
+    // -----------------------------
+    // Public Methods
+    // -----------------------------
+
+    fun setOnBoardingCompleted(value: Boolean) {
+        putBoolean(SecureKeys.KEY_APP_LAUNCH_FIRST_TIME, value)
     }
+
+    fun getOnboardingCompleted(): Boolean? {
+        return getBoolean(SecureKeys.KEY_APP_LAUNCH_FIRST_TIME)
+
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.aks.parkingapp.data.local.db
+package com.aks.parkingapp.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

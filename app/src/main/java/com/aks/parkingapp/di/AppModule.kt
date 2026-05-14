@@ -2,8 +2,9 @@ package com.aks.parkingapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.aks.parkingapp.data.local.dao.UserDao
 import com.aks.parkingapp.data.local.db.AppDatabase
-import com.aks.parkingapp.data.local.db.VehicleDao
+import com.aks.parkingapp.data.local.dao.VehicleDao
 import com.aks.parkingapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -30,7 +31,17 @@ object AppModule {
         ).build()
 
     @Provides
-    fun provideUserDao(db: AppDatabase): VehicleDao = db.vehicleDao()
+    fun provideVehicleDao(db: AppDatabase): VehicleDao = db.vehicleDao()
+
+    @Provides
+    fun provideUserDao(
+        db: AppDatabase
+    ): UserDao {
+
+        return db.userDao()
+    }
+
+
 
     @Provides
     @Singleton

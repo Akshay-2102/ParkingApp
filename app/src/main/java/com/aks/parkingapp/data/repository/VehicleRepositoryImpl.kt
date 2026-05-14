@@ -1,6 +1,6 @@
 package com.aks.parkingapp.data.repository
 
-import com.aks.parkingapp.data.local.db.VehicleDao
+import com.aks.parkingapp.data.local.dao.VehicleDao
 import com.aks.parkingapp.data.mapper.toDomain
 import com.aks.parkingapp.data.mapper.toEntity
 import com.aks.parkingapp.domain.model.Vehicle

@@ -92,6 +92,9 @@ dependencies {
     // ---------- IMAGE ----------
     implementation(libs.coil.compose)
 
+    // ---------- Secure CRYPTO ----------
+    implementation(libs.androidx.security.crypto)
+
     // ---------- UNIT TEST ----------
     testImplementation(libs.junit)
 

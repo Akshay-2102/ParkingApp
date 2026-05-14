@@ -8,4 +8,8 @@ object Constants {
     const val register = "api/v1/user/register"
     const val login = "api/v1/user/login"
 
+
+    // Compose data pass keys
+    const val MOBILE_NO = "mobileNo"
+
 }

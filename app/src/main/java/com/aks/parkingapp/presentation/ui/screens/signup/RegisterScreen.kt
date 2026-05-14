@@ -1,114 +1,115 @@
-package com.aks.parkingapp.presentation.ui.screens
+package com.aks.parkingapp.presentation.ui.screens.signup
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import com.aks.parkingapp.R
-import android.net.Uri
-import android.opengl.ETC1.isValid
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import coil.compose.rememberAsyncImagePainter
-import java.io.File
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.aks.parkingapp.presentation.navigation.Routes
+import com.aks.parkingapp.presentation.ui.screens.CommonToolbar
 
 
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavController){
+fun RegisterScreen(
+    navController: NavController,
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
 
-    var selectedCode by rememberSaveable {
-        mutableStateOf("+91")
+    val uiState by viewModel
+        .uiState
+        .collectAsState()
+
+
+    // --------------------------------
+    // Observe Events
+    // --------------------------------
+
+    LaunchedEffect(Unit) {
+
+        viewModel.event.collect { event ->
+
+            when(event) {
+
+                RegisterUiEvent.NavigateToOtp -> {
+
+                    navController.navigate(
+                        Routes.verifyOtpRoute(
+                            uiState.fullMobileNumber
+                        )
+                    )
+                }
+
+                is RegisterUiEvent.ShowError -> {
+
+                    // Snackbar later
+                }
+            }
+        }
     }
-    
-    var mobileNumber by rememberSaveable { mutableStateOf("") }
 
-    val isValid = mobileNumber.length == 10
-
-    // Animation
     val buttonAlpha by animateFloatAsState(
-        targetValue = if (isValid) 1f else 0.5f,
+        targetValue = if (uiState.isValidMobile) 1f else 0.5f,
         label = ""
     )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+
         topBar = {
+
             CommonToolbar(
                 title = "Sign up",
-                showBackButton = false,
-                onBackClick = {
-                    navController.popBackStack()
-                }
+                showBackButton = false
             )
         }
+
     ) { paddingValues ->
 
         Column(
@@ -122,7 +123,6 @@ fun RegisterScreen(navController: NavController){
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Title Animation
             AnimatedVisibility(
                 visible = true,
                 enter = fadeIn() + slideInVertically()
@@ -131,7 +131,7 @@ fun RegisterScreen(navController: NavController){
                 Column {
 
                     Text(
-                        text = "Verify your\nphone number",
+                        text = "Verify your\nmobile number",
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         lineHeight = 38.sp
@@ -149,6 +149,7 @@ fun RegisterScreen(navController: NavController){
                                     fontWeight = FontWeight.Bold
                                 )
                             ) {
+
                                 append("One Time Password (OTP)")
                             }
 
@@ -169,40 +170,52 @@ fun RegisterScreen(navController: NavController){
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Mobile Input
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
                 CountryCodeDropDown(
-                    selectedCode = selectedCode,
-                    onCodeSelected = { selectedCode = it}
+
+                    selectedCode = uiState.countryCode,
+
+                    onCodeSelected = {
+                        viewModel.onCountryCodeChanged(it)
+                    }
                 )
 
                 OutlinedTextField(
-                    value = mobileNumber,
+
+                    value = uiState.mobileNumber,
+
                     onValueChange = {
 
-                        if (it.length <= 10 && it.all(Char::isDigit)) {
-                            mobileNumber = it
-                        }
+                        viewModel.onMobileChanged(it)
                     },
+
                     modifier = Modifier.weight(1f),
+
                     placeholder = {
+
                         Text("0000000000")
                     },
+
                     singleLine = true,
+
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
                     ),
+
                     shape = RoundedCornerShape(14.dp),
-                    isError = mobileNumber.isNotEmpty() && !isValid
+
+                    isError = uiState.mobileNumber.isNotEmpty() &&
+                            !uiState.isValidMobile
                 )
             }
 
             AnimatedVisibility(
-                visible = mobileNumber.isNotEmpty() && !isValid
+                visible = uiState.mobileNumber.isNotEmpty() &&
+                        !uiState.isValidMobile
             ) {
 
                 Text(
@@ -234,30 +247,47 @@ fun RegisterScreen(navController: NavController){
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Button
             Button(
-                onClick = {},
-                enabled = isValid,
+
+                onClick = {
+                    viewModel.registerUser()
+                },
+
+                enabled = uiState.isValidMobile &&
+                        !uiState.isLoading,
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(58.dp)
                     .alpha(buttonAlpha),
+
                 shape = RoundedCornerShape(14.dp),
+
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
 
-                Text(
-                    text = "Get OTP",
-                    fontSize = 16.sp
-                )
+                if (uiState.isLoading) {
+
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(22.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+
+                } else {
+
+                    Text(
+                        text = "Get OTP",
+                        fontSize = 16.sp
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -269,33 +299,47 @@ fun CountryCodeDropDown(
 
     val countryCodes = listOf("+91")
 
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember {
+        mutableStateOf(false)
+    }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
+
         onExpandedChange = {
             expanded = !expanded
         }
     ) {
 
         OutlinedTextField(
+
             value = selectedCode,
+
             onValueChange = {},
+
             readOnly = true,
+
             modifier = Modifier
                 .menuAnchor()
                 .width(100.dp),
+
             trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
+
+                ExposedDropdownMenuDefaults
+                    .TrailingIcon(
+                        expanded = expanded
+                    )
             },
+
             shape = RoundedCornerShape(14.dp),
+
             singleLine = true
         )
 
         ExposedDropdownMenu(
+
             expanded = expanded,
+
             onDismissRequest = {
                 expanded = false
             }
@@ -304,11 +348,15 @@ fun CountryCodeDropDown(
             countryCodes.forEach { code ->
 
                 DropdownMenuItem(
+
                     text = {
                         Text(code)
                     },
+
                     onClick = {
+
                         onCodeSelected(code)
+
                         expanded = false
                     }
                 )
