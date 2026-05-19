@@ -1,8 +1,10 @@
 package com.aks.parkingapp.di
 
 import com.aks.parkingapp.data.repository.AuthRepositoryImpl
+import com.aks.parkingapp.data.repository.OtpRepositoryImpl
 import com.aks.parkingapp.data.repository.VehicleRepositoryImpl
-import com.aks.parkingapp.domain.repository.AuthRepository
+import com.aks.parkingapp.domain.repository.RegistrationRepository
+import com.aks.parkingapp.domain.repository.OtpRepository
 import com.aks.parkingapp.domain.repository.VehicleRepository
 import dagger.Binds
 import dagger.Module
@@ -24,5 +26,11 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
-    ): AuthRepository
+    ): RegistrationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOtpRepository(
+        otpRepositoryImpl: OtpRepositoryImpl
+    ): OtpRepository
 }

@@ -7,13 +7,17 @@ import com.aks.parkingapp.domain.model.User
 fun UserEntity.toDomain(): User {
 
     return User(
-        mobileNumber = mobileNumber
+        mobileNumber = mobileNumber,
+        otp = otp,
+        isSignupCompleted = isSignupCompleted
     )
 }
 
 fun User.toEntity(): UserEntity {
 
     return UserEntity(
-        mobileNumber = mobileNumber
+        mobileNumber = mobileNumber,
+        otp = otp,
+        isSignupCompleted = isSignupCompleted
     )
 }

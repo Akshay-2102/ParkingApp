@@ -5,8 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "users")
 data class UserEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
 
-    val mobileNumber: String
+    @PrimaryKey(autoGenerate = true)
+    val userId: Int = 0,
+    val mobileNumber: String,
+    val otp: String,
+    val isSignupCompleted: Boolean = false
 )

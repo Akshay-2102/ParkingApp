@@ -37,7 +37,6 @@ object AppModule {
     fun provideUserDao(
         db: AppDatabase
     ): UserDao {
-
         return db.userDao()
     }
 

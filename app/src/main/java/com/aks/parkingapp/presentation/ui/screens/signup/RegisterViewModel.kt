@@ -2,6 +2,8 @@ package com.aks.parkingapp.presentation.ui.screens.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aks.parkingapp.domain.model.User
+import com.aks.parkingapp.domain.usecases.ClearUsersUseCase
 import com.aks.parkingapp.domain.usecases.RegisterUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerUserUseCase: RegisterUserUseCase
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val clearUsersUseCase: ClearUsersUseCase
 ) : ViewModel() {
 
     // --------------------------------
@@ -87,8 +90,19 @@ class RegisterViewModel @Inject constructor(
                     )
                 }
 
+                val otp = (100000..999999)
+                    .random()
+                    .toString()
+
+                clearUsersUseCase()
+
+                val user = User(
+                _uiState.value.countryCode + " " + _uiState.value.mobileNumber,
+                 otp,
+                false)
+
                 registerUserUseCase(
-                    _uiState.value.mobileNumber
+                    user
                 )
 
                 _uiState.update {

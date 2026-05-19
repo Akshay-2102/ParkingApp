@@ -14,7 +14,19 @@ interface UserDao {
         user: UserEntity
     )
 
+    @Query(""" DELETE FROM users WHERE isSignupCompleted = 0 """)
+    suspend fun deleteUnverifiedUsers()
+
     @Query("SELECT * FROM users")
     fun getUsers(): Flow<List<UserEntity>>
+
+    @Query("""SELECT * FROM users WHERE mobileNumber = :mobile LIMIT 1 """)
+    suspend fun getUserByMobile(mobile: String): UserEntity?
+
+    @Query(""" UPDATE users SET otp = :otp WHERE mobileNumber = :mobile """)
+    suspend fun updateOtp(mobile: String, otp: String)
+
+    @Query(""" UPDATE users SET isSignUpCompleted = :isSignUpCompleted WHERE mobileNumber = :mobile """)
+    suspend fun updateSignUpCompleted(mobile: String, isSignUpCompleted: Boolean)
 
 }

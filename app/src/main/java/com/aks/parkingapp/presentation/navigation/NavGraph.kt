@@ -14,7 +14,7 @@ import com.aks.parkingapp.presentation.ui.screens.HomeScreen
 import com.aks.parkingapp.presentation.ui.screens.LoginScreen
 import com.aks.parkingapp.presentation.ui.screens.signup.RegisterScreen
 import com.aks.parkingapp.presentation.ui.screens.splash.SplashScreen
-import com.aks.parkingapp.presentation.ui.screens.ValidateOTPScreen
+import com.aks.parkingapp.presentation.ui.screens.validateOTP.ValidateOTPScreen
 import com.aks.parkingapp.utils.Constants
 
 @Composable
