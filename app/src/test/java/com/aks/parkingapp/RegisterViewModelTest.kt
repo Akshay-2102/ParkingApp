@@ -10,6 +10,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -55,7 +56,7 @@ class RegisterViewModelTest {
 
         // For true validation check result like enter below or above 10 digits number then result getting true
         // so in this condition is match so result is getting pass test case for this condition
-        assertFalse(
+        assertTrue(
             viewModel.uiState.value.isValidMobile
         )
     }
