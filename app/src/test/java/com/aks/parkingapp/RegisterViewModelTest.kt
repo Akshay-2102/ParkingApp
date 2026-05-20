@@ -56,7 +56,7 @@ class RegisterViewModelTest {
 
         // For true validation check result like enter below or above 10 digits number then result getting true
         // so in this condition is match so result is getting pass test case for this condition
-        assertTrue(
+        assertFalse(
             viewModel.uiState.value.isValidMobile
         )
     }
