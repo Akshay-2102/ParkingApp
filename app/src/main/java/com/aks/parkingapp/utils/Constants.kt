@@ -2,12 +2,12 @@ package com.aks.parkingapp.utils
 
 object Constants {
 
-    const val BASE_URL = "https://dev.vizpay.in:9011/"
+    const val BASE_URL = "http://192.168.0.100:3000/"
 
-    //Api Url's
-    const val register = "api/v1/user/register"
-    const val login = "api/v1/user/login"
-
+    //Api
+    const val REGISTER = "register"
+    const val LOGIN = "login"
+    const val GET_USER = "users"
 
     // Compose data pass keys
     const val MOBILE_NO = "mobileNo"

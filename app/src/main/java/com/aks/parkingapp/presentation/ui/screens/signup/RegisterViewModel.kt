@@ -1,12 +1,14 @@
 package com.aks.parkingapp.presentation.ui.screens.signup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aks.parkingapp.data.remote.registerDTO.RegisterRequestDTO
 import com.aks.parkingapp.domain.model.User
+import com.aks.parkingapp.domain.model.register.RegisterRequest
 import com.aks.parkingapp.domain.usecases.ClearUsersUseCase
 import com.aks.parkingapp.domain.usecases.RegisterUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -101,9 +103,37 @@ class RegisterViewModel @Inject constructor(
                  otp,
                 false)
 
-                registerUserUseCase(
+              /*  registerUserUseCase(
                     user
+                )*/
+
+                //@todo Api call for testing
+                val reqRegister = RegisterRequest(
+                    "Akshay","akshay.c2102@gmail.com","123456"
                 )
+
+                val result =
+                    registerUserUseCase(
+                        reqRegister
+                    )
+
+                result.onSuccess { response ->
+
+                    Log.d("RegViewModel",response.message)
+
+                    _event.emit(
+                        RegisterUiEvent.NavigateToOtp
+                    )
+
+                }.onFailure {
+
+                    _event.emit(
+                        RegisterUiEvent.ShowError(
+                            it.message ?: "Error"
+                        )
+                    )
+                }
+
 
                 _uiState.update {
 
@@ -112,9 +142,9 @@ class RegisterViewModel @Inject constructor(
                     )
                 }
 
-                _event.emit(
+              /*  _event.emit(
                     RegisterUiEvent.NavigateToOtp
-                )
+                )*/
 
             } catch (e: Exception) {
 

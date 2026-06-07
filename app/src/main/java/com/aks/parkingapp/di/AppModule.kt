@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.aks.parkingapp.data.local.dao.UserDao
 import com.aks.parkingapp.data.local.db.AppDatabase
 import com.aks.parkingapp.data.local.dao.VehicleDao
+import com.aks.parkingapp.data.remote.ApiService
 import com.aks.parkingapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -50,8 +51,8 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
- /*   @Provides
+    @Provides
     fun provideApi(retrofit: Retrofit): ApiService =
-        retrofit.create(ApiService::class.java)*/
+        retrofit.create(ApiService::class.java)
 
 }

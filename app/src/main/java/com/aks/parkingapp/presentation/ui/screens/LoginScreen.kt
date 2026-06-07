@@ -49,6 +49,7 @@ import com.aks.parkingapp.ui.theme.ParkingAppTheme
 @Composable
 fun LoginScreen(navController: NavController){
 
+
     Box(modifier = Modifier.fillMaxSize()){
 
         /*Image(
