@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aks.parkingapp.presentation.ui.screens.HomeScreen
 import com.aks.parkingapp.presentation.ui.screens.LoginScreen
+import com.aks.parkingapp.presentation.ui.screens.signup.RegisterRoute
 import com.aks.parkingapp.presentation.ui.screens.signup.RegisterScreen
 import com.aks.parkingapp.presentation.ui.screens.splash.SplashScreen
 import com.aks.parkingapp.presentation.ui.screens.validateOTP.ValidateOTPScreen
@@ -46,10 +47,17 @@ fun AppNavGraph() {
         }
 
         composable(Routes.REGISTER) {
-            RegisterScreen(navController)
+            //RegisterScreen(navController)
+            RegisterRoute(navController)
         }
 
-        composable(Routes.VERIFY_OTP,
+        composable(Routes.VERIFY_OTP) {
+            ValidateOTPScreen(
+                navController = navController
+            )
+        }
+
+        /*composable(Routes.VERIFY_OTP,
             arguments = listOf(
             navArgument(Constants.MOBILE_NO) {
                 type = NavType.StringType
@@ -63,7 +71,7 @@ fun AppNavGraph() {
                 navController = navController,
                 mobileNo = mobileNo
             )
-        }
+        }*/
 
         composable(Routes.LOGIN) {
             LoginScreen(navController)

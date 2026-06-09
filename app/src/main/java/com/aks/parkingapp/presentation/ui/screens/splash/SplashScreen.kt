@@ -83,7 +83,7 @@ fun SplashScreen(
 
         Image(
             painter = painterResource(
-                R.drawable.parking_logo
+                R.drawable.logo
             ),
             contentDescription = "Logo",
             modifier = Modifier

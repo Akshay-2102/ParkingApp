@@ -10,6 +10,7 @@ fun RegisterRequest.toRegisterRequestDTO(): RegisterRequestDTO {
     return RegisterRequestDTO(
         name = name,
         email = email,
+        mobile = mobileNo,
         password = password,
     )
 }
@@ -18,8 +19,8 @@ fun RegisterRequest.toRegisterRequestDTO(): RegisterRequestDTO {
 fun RegisterResponseDTO.toRegisterResult(): RegisterResult {
 
     return RegisterResult(
-        id = id,
-        message = message,
-        success = success
+        id = id ?: 0,
+        message = message ?: "",
+        success = success ?: false
     )
 }

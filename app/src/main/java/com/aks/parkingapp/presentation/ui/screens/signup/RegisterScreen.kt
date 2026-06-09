@@ -3,9 +3,9 @@ package com.aks.parkingapp.presentation.ui.screens.signup
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,96 +16,147 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.aks.parkingapp.presentation.ui.screens.CommonToolbar
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.aks.parkingapp.presentation.navigation.Routes
-import com.aks.parkingapp.presentation.ui.screens.CommonToolbar
+import androidx.compose.ui.tooling.preview.Preview
+import com.aks.parkingapp.R
 
 
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    navController: NavController,
-    viewModel: RegisterViewModel = hiltViewModel()
+    uiState: RegisterUiState,
+    onFullNameChanged: (String) -> Unit,
+    onEmailChanged: (String) -> Unit,
+    onMobileChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onConfirmPasswordChanged: (String) -> Unit,
+    snackbarHostState: SnackbarHostState,
+    onRegisterClick: () -> Unit
 ) {
-
-    val uiState by viewModel
-        .uiState
-        .collectAsState()
-
-
-    // --------------------------------
-    // Observe Events
-    // --------------------------------
-
-    LaunchedEffect(Unit) {
-
-        viewModel.event.collect { event ->
-
-            when(event) {
-
-                RegisterUiEvent.NavigateToOtp -> {
-
-                    navController.navigate(
-                        Routes.verifyOtpRoute(
-                            uiState.fullMobileNumber
-                        )
-                    )
-                }
-
-                is RegisterUiEvent.ShowError -> {
-
-                    // Snackbar later
-                }
-            }
-        }
-    }
-
     val buttonAlpha by animateFloatAsState(
         targetValue = if (uiState.isValidMobile) 1f else 0.5f,
         label = ""
     )
 
+    var passwordVisible by remember {
+        mutableStateOf(false)
+    }
+
+    var confirmPasswordVisible by remember {
+        mutableStateOf(false)
+    }
+
+    var isChecked by remember {
+        mutableStateOf(false)
+    }
+
+    val nameFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val emailFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val mobileFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val passwordFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val confirmPasswordFocusRequester = remember {
+        FocusRequester()
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+
+        snackbarHost = {
+
+            SnackbarHost(
+
+                hostState = snackbarHostState
+
+            ) { snackbarData ->
+
+                Card(
+
+                    shape = RoundedCornerShape(12.dp),
+
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Red
+                    )
+
+                ) {
+
+                    Text(
+
+                        text = snackbarData.visuals.message,
+
+                        color = Color.White,
+
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+        },
 
         topBar = {
 
             CommonToolbar(
-                title = "Sign up",
+                title = stringResource(R.string.headline_sign_up) ,
                 showBackButton = false
             )
         }
@@ -115,150 +166,368 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = Color.White)
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 16.dp)
                 .navigationBarsPadding()
-                .imePadding()
+                .imePadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            AnimatedVisibility(
-                visible = true,
-                enter = fadeIn() + slideInVertically()
-            ) {
-
-                Column {
-
-                    Text(
-                        text = "Verify your\nmobile number",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        lineHeight = 38.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = buildAnnotatedString {
-
-                            append("We have send you an ")
-
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold
-                                )
-                            ) {
-
-                                append("One Time Password (OTP)")
-                            }
-
-                            append(" on this mobile number")
-                        },
-                        color = Color.Gray,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
-
             Text(
-                text = "Enter mobile no.",
-                fontWeight = FontWeight.Medium
+                text = stringResource(R.string.label_create_your_account),
+                style = MaterialTheme.typography.bodyMedium,
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            Image(
+                painter = painterResource(
+                    R.drawable.logo
+                ),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .size(160.dp)
+            )
 
-                CountryCodeDropDown(
 
-                    selectedCode = uiState.countryCode,
+            OutlinedTextField(
+                value = uiState.fullName,
+                onValueChange = {
+                    onFullNameChanged(it)
+                },
+                leadingIcon = {
 
-                    onCodeSelected = {
-                        viewModel.onCountryCodeChanged(it)
+                    Icon(imageVector = Icons.Filled.Person, contentDescription = "Person Icon")
+                },
+                placeholder = {
+                    Text(text = stringResource(R.string.hint_enter_full_name))
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    capitalization =
+                        KeyboardCapitalization.Words,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        emailFocusRequester.requestFocus()
                     }
-                )
-
-                OutlinedTextField(
-
-                    value = uiState.mobileNumber,
-
-                    onValueChange = {
-
-                        viewModel.onMobileChanged(it)
-                    },
-
-                    modifier = Modifier.weight(1f),
-
-                    placeholder = {
-
-                        Text("0000000000")
-                    },
-
-                    singleLine = true,
-
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
-                    ),
-
-                    shape = RoundedCornerShape(14.dp),
-
-                    isError = uiState.mobileNumber.isNotEmpty() &&
-                            !uiState.isValidMobile
-                )
-            }
+                ),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .focusRequester(nameFocusRequester),
+                isError = uiState.fullName.isNotEmpty() &&
+                        !uiState.isValidFullName
+            )
 
             AnimatedVisibility(
-                visible = uiState.mobileNumber.isNotEmpty() &&
-                        !uiState.isValidMobile
+                visible = uiState.fullName.isNotEmpty() &&
+                        !uiState.isValidFullName
             ) {
-
                 Text(
-                    text = "Please enter valid 10 digit number",
+                    text = "Please enter a valid full name",
                     color = Color.Red,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.Center,
+            OutlinedTextField(
+
+                value = uiState.emailAddress,
+
+                onValueChange = {
+                    onEmailChanged(it)
+                },
+                leadingIcon = {
+
+                    Icon(imageVector = Icons.Filled.Email, contentDescription = "Email Icon")
+                },
+
+                placeholder = {
+                    Text(stringResource(R.string.hint_enter_email_address))
+                },
+
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        mobileFocusRequester.requestFocus()
+                    }
+                ),
+                shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth()
+                    .height(56.dp)
+                    .focusRequester(emailFocusRequester),
+                isError = uiState.emailAddress.isNotEmpty() &&
+                        !uiState.isValidEmail
+            )
+
+            AnimatedVisibility(
+                visible = uiState.emailAddress.isNotEmpty() &&
+                        !uiState.isValidEmail
             ) {
-
                 Text(
-                    text = "Already have an account? ",
-                    color = Color.Gray
-                )
-
-                Text(
-                    text = "Log in",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
+                    text = "Please enter a valid email",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+            OutlinedTextField(
+
+                value = uiState.mobileNumber,
+
+                onValueChange = {
+
+                    onMobileChanged(it)
+                },
+                leadingIcon = {
+
+                    Icon(imageVector = Icons.Filled.Call, contentDescription = "Call Icon")
+                },
+
+                placeholder = {
+                    Text(stringResource(R.string.hint_enter_mobile_number))
+                },
+
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        passwordFocusRequester.requestFocus()
+                    }
+                ),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.fillMaxWidth()
+                    .height(56.dp)
+                    .focusRequester(mobileFocusRequester),
+                isError = uiState.mobileNumber.isNotEmpty() &&
+                        !uiState.isValidMobile
+            )
+
+            AnimatedVisibility(
+                visible = uiState.mobileNumber.isNotEmpty() &&
+                        !uiState.isValidMobile
+            ) {
+                Text(
+                    text = "Please enter a valid mobile number",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+            OutlinedTextField(
+
+                value = uiState.password,
+
+                onValueChange = {
+                    onPasswordChanged(it)
+                },
+                leadingIcon = {
+
+                    Icon(imageVector = Icons.Filled.Lock, contentDescription = "Lock Icon")
+                },
+                trailingIcon = {
+
+                    IconButton(
+                        onClick = {
+                            passwordVisible = !passwordVisible
+                        }
+                    ) {
+
+                        Icon(
+                            imageVector =
+                                if (passwordVisible)
+                                    Icons.Default.Visibility
+                                else
+                                    Icons.Default.VisibilityOff,
+
+                            contentDescription = null
+                        )
+                    }
+                },
+
+                placeholder = {
+                    Text(stringResource(R.string.hint_enter_password))
+                },
+                visualTransformation =
+                    if (passwordVisible)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
+
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        confirmPasswordFocusRequester.requestFocus()
+                    }
+                ),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.fillMaxWidth()
+                    .height(56.dp)
+                    .focusRequester(passwordFocusRequester),
+                isError = uiState.password.isNotEmpty() &&
+                        !uiState.isValidPassword
+            )
+
+            AnimatedVisibility(
+                visible = uiState.password.isNotEmpty() &&
+                        !uiState.isValidPassword
+            ) {
+                Text(
+                    text = "Min 8 chars, uppercase, lowercase, number & special character",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+            OutlinedTextField(
+
+                value = uiState.confirmPassword,
+
+                onValueChange = {
+
+                    onConfirmPasswordChanged(it)
+                },
+                leadingIcon = {
+
+                    Icon(imageVector = Icons.Filled.Lock, contentDescription = "Lock Icon")
+
+                },
+
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            confirmPasswordVisible = !confirmPasswordVisible
+                        }
+                    ) {
+
+                        Icon(
+                            imageVector =
+                                if (confirmPasswordVisible)
+                                    Icons.Default.Visibility
+                                else
+                                    Icons.Default.VisibilityOff,
+
+                            contentDescription = null
+                        )
+                    }
+                },
+                visualTransformation =
+                    if (confirmPasswordVisible)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
+
+                placeholder = {
+                    Text(stringResource(R.string.hint_enter_confirm_password))
+                },
+
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.fillMaxWidth()
+                    .height(56.dp)
+                    .focusRequester(confirmPasswordFocusRequester),
+                isError = uiState.confirmPassword.isNotEmpty() &&
+                        !uiState.isPasswordMatched
+            )
+
+            AnimatedVisibility(
+                visible = uiState.confirmPassword.isNotEmpty() &&
+                        !uiState.isPasswordMatched
+            ) {
+                Text(
+                    text = "Password does not match",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        isChecked = !isChecked
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = null
+                )
+
+                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
+
+                Text(
+                    text = buildAnnotatedString {
+
+                        append(stringResource(R.string.hint_teams_and_condition))
+                        append(" ")
+
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Blue
+                            )
+                        ) {
+                            append(stringResource(R.string.hint_tnc))
+                        }
+                    },
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+            }
+
 
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
 
                 onClick = {
-                    viewModel.registerUser()
+                    onRegisterClick()
                 },
 
-                enabled = uiState.isValidMobile &&
-                        !uiState.isLoading,
+                enabled = uiState.isValidFullName &&
+                          uiState.isValidEmail &&
+                          uiState.isValidPassword &&
+                          uiState.isPasswordMatched,
 
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(58.dp)
+                    .height(56.dp)
                     .alpha(buttonAlpha),
 
                 shape = RoundedCornerShape(14.dp),
@@ -277,90 +546,31 @@ fun RegisterScreen(
                     )
 
                 } else {
-
                     Text(
-                        text = "Get OTP",
-                        fontSize = 16.sp
+                        text = stringResource(R.string.headline_sign_up),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(2.dp))
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
-fun CountryCodeDropDown(
-    selectedCode: String,
-    onCodeSelected: (String) -> Unit
-) {
+fun RegisterPreview() {
 
-    val countryCodes = listOf("+91")
+    RegisterScreen(
+        uiState = RegisterUiState(),
+        onFullNameChanged = {},
+        onEmailChanged={},
+        onMobileChanged = {},
+        onPasswordChanged = {},
+        onConfirmPasswordChanged = {},
+        snackbarHostState = SnackbarHostState(),
+        onRegisterClick = {}
 
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-
-        OutlinedTextField(
-
-            value = selectedCode,
-
-            onValueChange = {},
-
-            readOnly = true,
-
-            modifier = Modifier
-                .menuAnchor()
-                .width(100.dp),
-
-            trailingIcon = {
-
-                ExposedDropdownMenuDefaults
-                    .TrailingIcon(
-                        expanded = expanded
-                    )
-            },
-
-            shape = RoundedCornerShape(14.dp),
-
-            singleLine = true
-        )
-
-        ExposedDropdownMenu(
-
-            expanded = expanded,
-
-            onDismissRequest = {
-                expanded = false
-            }
-        ) {
-
-            countryCodes.forEach { code ->
-
-                DropdownMenuItem(
-
-                    text = {
-                        Text(code)
-                    },
-
-                    onClick = {
-
-                        onCodeSelected(code)
-
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
+    )
 }

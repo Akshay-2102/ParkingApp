@@ -74,7 +74,6 @@ import com.aks.parkingapp.utils.maskMobileNumber
 @Composable
 fun ValidateOTPScreen(
     navController: NavController,
-    mobileNo: String,
     viewModel: OtpViewModel = hiltViewModel()) {
 
     val uiState by viewModel.uiState.collectAsState()

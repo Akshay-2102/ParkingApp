@@ -43,6 +43,26 @@ class RegisterViewModelTest {
 
 
     // Validation test
+
+    @Test
+    fun `full name should be invalid when less than 6 latter`(){
+        viewModel.onFullNameChange(
+            "Aksha"
+        )
+
+        assertFalse(
+            viewModel.uiState.value.isValidFullName
+        )
+    }
+
+    @Test
+    fun `onFullNameChanged update full name`(){
+        val fullName = "Akshay Chikhalekar"
+        viewModel.onFullNameChange(fullName)
+        assert(viewModel.uiState.value.fullName == fullName)
+    }
+
+
     @Test
     fun `mobile should be invalid when less than 10 digits`() {
         viewModel.onMobileChanged(
@@ -68,6 +88,7 @@ class RegisterViewModelTest {
         viewModel.onMobileChanged(number)
         assert(viewModel.uiState.value.mobileNumber == number)
     }
+
 
 
     @Test

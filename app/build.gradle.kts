@@ -93,6 +93,9 @@ dependencies {
     // ---------- IMAGE ----------
     implementation(libs.coil.compose)
 
+    // ---------- ICONS ----------
+    implementation(libs.androidx.compose.material.icons.extended)
+
     // ---------- Secure CRYPTO ----------
     implementation(libs.androidx.security.crypto)
 

@@ -13,45 +13,55 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
 
-    primary = PrimaryBlueDark,
-    onPrimary = Color.White,
+    primary = md_theme_dark_primary,
+    onPrimary = md_theme_dark_onPrimary,
 
-    background = BackgroundDark,
-    onBackground = TextPrimaryDark,
+    secondary = md_theme_dark_secondary,
+    onSecondary = md_theme_dark_onSecondary,
 
-    surface = SurfaceDark,
-    onSurface = TextPrimaryDark
+    background = md_theme_dark_background,
+    onBackground = md_theme_dark_onBackground,
+
+    surface = md_theme_dark_surface,
+    onSurface = md_theme_dark_onSurface,
+
+    outline = md_theme_dark_outline,
+
+    surfaceVariant = md_theme_dark_surfaceVariant,
+    onSurfaceVariant = md_theme_dark_onSurfaceVariant
 )
-
 
 
 private val LightColorScheme = lightColorScheme(
 
-    primary = PrimaryBlue,
-    onPrimary = Color.White,
+    primary = md_theme_light_primary,
+    onPrimary = md_theme_light_onPrimary,
 
-    background = BackgroundLight,
-    onBackground = TextPrimaryLight,
+    secondary = md_theme_light_secondary,
+    onSecondary = md_theme_light_onSecondary,
 
-    surface = SurfaceLight,
-    onSurface = TextPrimaryLight
+    background = md_theme_light_background,
+    onBackground = md_theme_light_onBackground,
+
+    surface = md_theme_light_surface,
+    onSurface = md_theme_light_onSurface,
+
+    outline = md_theme_light_outline,
+
+    surfaceVariant = md_theme_light_surfaceVariant,
+    onSurfaceVariant = md_theme_light_onSurfaceVariant
 )
 
 @Composable
 fun ParkingAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = if (darkTheme) {
+        DarkColorScheme
+    } else {
+        LightColorScheme
     }
 
     MaterialTheme(

@@ -2,28 +2,56 @@ package com.aks.parkingapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Light Theme
+// --------------------
+// LIGHT THEME
+// --------------------
 
-val PrimaryBlue = Color(0xFF2563EB)
-val PrimaryBlueDark = Color(0xFF1D4ED8)
+val md_theme_light_primary = Color(0xFF0B2A5B)       // Logo Navy Blue
+val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 
-val BackgroundLight = Color(0xFFF8FAFC)
-val SurfaceLight = Color(0xFFFFFFFF)
+val md_theme_light_secondary = Color(0xFF41B649)     // Logo Green
+val md_theme_light_onSecondary = Color(0xFFFFFFFF)
 
-val TextPrimaryLight = Color(0xFF0F172A)
-val TextSecondaryLight = Color(0xFF475569)
+val md_theme_light_background = Color(0xFFF7F9FC)    // Screen BG
+val md_theme_light_onBackground = Color(0xFF111827)
+
+val md_theme_light_surface = Color(0xFFFFFFFF)       // Card BG
+val md_theme_light_onSurface = Color(0xFF111827)
+
+val md_theme_light_outline = Color(0xFFD6DCE5)
+
+val md_theme_light_surfaceVariant = Color(0xFFF1F5F9)
+val md_theme_light_onSurfaceVariant = Color(0xFF6B7280)
 
 
-// Dark Theme
+// --------------------
+// DARK THEME
+// --------------------
 
-val BackgroundDark = Color(0xFF020617)
-val SurfaceDark = Color(0xFF0F172A)
+val md_theme_dark_primary = Color(0xFF4F8CFF)
+val md_theme_dark_onPrimary = Color(0xFFFFFFFF)
 
-val TextPrimaryDark = Color(0xFFF8FAFC)
-val TextSecondaryDark = Color(0xFFCBD5E1)
+val md_theme_dark_secondary = Color(0xFF58D26A)
+val md_theme_dark_onSecondary = Color(0xFFFFFFFF)
+
+val md_theme_dark_background = Color(0xFF0F172A)
+val md_theme_dark_onBackground = Color(0xFFF8FAFC)
+
+val md_theme_dark_surface = Color(0xFF1E293B)
+val md_theme_dark_onSurface = Color(0xFFF8FAFC)
+
+val md_theme_dark_outline = Color(0xFF334155)
+
+val md_theme_dark_surfaceVariant = Color(0xFF243244)
+val md_theme_dark_onSurfaceVariant = Color(0xFFCBD5E1)
+
+
+
+
+
+
+
+
 
 
 // Extra Colors
-
-val SuccessGreen = Color(0xFF16A34A)
-val ErrorRed = Color(0xFFDC2626)

@@ -27,8 +27,7 @@ class RegisterViewModel @Inject constructor(
     // STATE FLOW
     // --------------------------------
 
-    private val _uiState =
-        MutableStateFlow(RegisterUiState())
+    private val _uiState = MutableStateFlow(RegisterUiState())
 
     val uiState = _uiState.asStateFlow()
 
@@ -36,14 +35,41 @@ class RegisterViewModel @Inject constructor(
     // SHARED FLOW
     // --------------------------------
 
-    private val _event =
-        MutableSharedFlow<RegisterUiEvent>()
-
+    private val _event = MutableSharedFlow<RegisterUiEvent>()
     val event = _event.asSharedFlow()
 
     // --------------------------------
     // Update Mobile
     // --------------------------------
+
+    fun onFullNameChange(
+        fullName: String
+    ){
+        if (
+            fullName.length <= 50 &&
+            fullName.all {
+
+                it.isLetter() ||
+                        it.isWhitespace() ||
+                        it == '.' ||
+                        it == '-' ||
+                        it == '\''
+            }
+            ){
+            _uiState.update {
+                it.copy(fullName = fullName)
+            }
+        }
+    }
+
+
+    fun onEmailChange(
+        email: String
+    ){
+        _uiState.update {
+            it.copy(emailAddress = email)
+        }
+    }
 
     fun onMobileChanged(
         number: String
@@ -63,16 +89,24 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    // --------------------------------
-    // for country code
-    // --------------------------------
-    fun onCountryCodeChanged(code: String) {
+
+    fun onPasswordChange(
+        password: String
+    ){
         _uiState.update {
-            it.copy(
-                countryCode = code
-            )
+            it.copy(password = password)
         }
     }
+
+    fun onConfirmPasswordChange(
+        confirmPassword: String
+    ){
+        _uiState.update {
+            it.copy(confirmPassword = confirmPassword)
+        }
+    }
+
+
 
 
     // --------------------------------
@@ -99,7 +133,7 @@ class RegisterViewModel @Inject constructor(
                 clearUsersUseCase()
 
                 val user = User(
-                _uiState.value.countryCode + " " + _uiState.value.mobileNumber,
+                 _uiState.value.mobileNumber,
                  otp,
                 false)
 
@@ -109,7 +143,10 @@ class RegisterViewModel @Inject constructor(
 
                 //@todo Api call for testing
                 val reqRegister = RegisterRequest(
-                    "Akshay","akshay.c2102@gmail.com","123456"
+                    _uiState.value.fullName,
+                    _uiState.value.emailAddress,
+                    _uiState.value.mobileNumber,
+                    _uiState.value.password
                 )
 
                 val result =

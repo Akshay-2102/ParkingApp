@@ -50,9 +50,9 @@ fun OnboardingScreen(
     val scope = rememberCoroutineScope()
 
     val pages = listOf(
-        OnboardingPage("Welcome", "Discover smart parking easily", R.drawable.parking_logo),
-        OnboardingPage("Find Spots", "Locate parking near you", R.drawable.parking_logo),
-        OnboardingPage("Book Instantly", "Reserve your slot quickly", R.drawable.parking_logo)
+        OnboardingPage("Welcome", "Discover smart parking easily", R.drawable.logo),
+        OnboardingPage("Find Spots", "Locate parking near you", R.drawable.logo),
+        OnboardingPage("Book Instantly", "Reserve your slot quickly", R.drawable.logo)
     )
 
     Box(
@@ -181,7 +181,7 @@ fun OnboardingScreen(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().height(56.dp),shape = RoundedCornerShape(14.dp)
             ) {
                 Text(
                     text = if (pagerState.currentPage == pages.lastIndex)

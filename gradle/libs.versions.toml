@@ -19,6 +19,7 @@ espressoCore = "3.6.1"
 
 # DI / DB / Network
 hilt = "2.51.1"
+materialIconsExtended = "1.7.8"
 navigationCompose = "2.8.4"
 room = "2.6.1"
 retrofit = "2.11.0"
@@ -40,6 +41,7 @@ security-crypto = "1.1.0-alpha06"
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
