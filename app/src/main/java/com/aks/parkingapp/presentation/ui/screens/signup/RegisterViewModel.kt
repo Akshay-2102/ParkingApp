@@ -20,7 +20,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
     private val registerUserUseCase: RegisterUserUseCase,
 ) : ViewModel() {
 
