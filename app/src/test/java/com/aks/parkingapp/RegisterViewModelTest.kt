@@ -1,11 +1,17 @@
 package com.aks.parkingapp
 
 import app.cash.turbine.test
+import com.aks.parkingapp.data.mapper.toRegisterResult
+import com.aks.parkingapp.data.remote.registerDTO.RegisterResponseDTO
 import com.aks.parkingapp.domain.model.User
+import com.aks.parkingapp.domain.model.register.RegisterRequest
+import com.aks.parkingapp.domain.model.register.RegisterResult
+import com.aks.parkingapp.domain.repository.RegistrationRepository
 import com.aks.parkingapp.domain.usecases.ClearUsersUseCase
 import com.aks.parkingapp.domain.usecases.RegisterUserUseCase
 import com.aks.parkingapp.presentation.ui.screens.signup.RegisterUiEvent
 import com.aks.parkingapp.presentation.ui.screens.signup.RegisterViewModel
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -15,6 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import net.bytebuddy.matcher.ElementMatchers.any
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,18 +36,17 @@ class RegisterViewModelTest {
     private lateinit var registerUserUseCase:
             RegisterUserUseCase
 
-    private lateinit var clearUsersUseCase:
-            ClearUsersUseCase
+    private val repository =
+        mockk<RegistrationRepository>()
 
     private lateinit var viewModel: RegisterViewModel
 
     @Before
     fun setup() {
-        registerUserUseCase = mockk(relaxed = true)
-        clearUsersUseCase = mockk(relaxed = true)
-        viewModel = RegisterViewModel(registerUserUseCase,clearUsersUseCase)
+        registerUserUseCase =
+            RegisterUserUseCase(repository)
+        viewModel = RegisterViewModel(registerUserUseCase)
     }
-
 
     // Validation test
 
@@ -61,7 +67,6 @@ class RegisterViewModelTest {
         viewModel.onFullNameChange(fullName)
         assert(viewModel.uiState.value.fullName == fullName)
     }
-
 
     @Test
     fun `mobile should be invalid when less than 10 digits`() {
@@ -89,58 +94,231 @@ class RegisterViewModelTest {
         assert(viewModel.uiState.value.mobileNumber == number)
     }
 
+    // Use case test
 
 
     @Test
-    fun `registerUser should call register usecase`() =
+    fun `invoke should call repository`() = runTest {
+
+        val request = RegisterRequest(
+            name = "Akshay",
+            email = "akshay@gmail.com",
+            mobileNo = "1234567890",
+            password = "123"
+        )
+
+        val result = RegisterResult(
+            id = 1,
+            success = true,
+            responseCode = "00",
+            responseMessage = "Success"
+        )
+
+        coEvery {
+            repository.registerUser(any())
+        } returns Result.success(result)
+
+        val response = registerUserUseCase(request)
+
+        assertEquals(
+            result,
+            response.getOrNull()
+        )
+
+        coVerify(exactly = 1) {
+            repository.registerUser(request)
+        }
+    }
+
+    // Mapper Test
+    @Test
+    fun `toRegisterResult should map dto correctly`() {
+
+        val dto = RegisterResponseDTO(
+            id = 1,
+            success = true,
+            responseCode = "00",
+            responseMessage = "Success"
+        )
+
+        val result = dto.toRegisterResult()
+
+        assertEquals(1, result.id)
+        assertEquals("Success", result.responseMessage)
+    }
+
+    // Network Error
+    @Test
+    fun `should emit error event when network error occurs`() =
         runTest {
 
-            viewModel.onMobileChanged(
-                "9876543210"
+            coEvery {
+                registerUserUseCase(any())
+            } returns Result.failure(
+                Exception("Network Error")
             )
 
-            viewModel.registerUser()
+            viewModel.onFullNameChange("Akshay")
+            viewModel.onEmailChange("akshay@gmail.com")
+            viewModel.onMobileChanged("1234567890")
+            viewModel.onPasswordChange("Akshay@21")
 
-            advanceUntilIdle()
+            viewModel.event.test {
 
-           /* coVerify(exactly = 1) {
+                viewModel.registerUser()
 
-                registerUserUseCase.invoke(any())
-            }*/
-
-            coVerify {
-                registerUserUseCase.invoke(
-                    //any()
-                    match<User> {
-                        it.mobileNumber.contains("9876543210")
-                    }
+                assertEquals(
+                    RegisterUiEvent.ShowError(
+                        "Network Error"
+                    ),
+                    awaitItem()
                 )
             }
         }
 
-
-    // Check after successful registration event should emit and change loading state
+    // Socket Timeout exception
     @Test
-    fun `should emit navigate event after successful registration`() =
+    fun `should emit error event when request timeout occurs`() =
         runTest {
 
-            viewModel.onMobileChanged(
-                "9876543210"
+            coEvery {
+                registerUserUseCase(any())
+            } returns Result.failure(
+                java.net.SocketTimeoutException(
+                    "Request timeout"
+                )
             )
 
             viewModel.event.test {
 
                 viewModel.registerUser()
 
-                advanceUntilIdle()
+                assertEquals(
+                    RegisterUiEvent.ShowError(
+                        "Request timeout"
+                    ),
+                    awaitItem()
+                )
+            }
+        }
+
+    // 404 Not Found Error
+    @Test
+    fun `should emit error event when server returns 404`() =
+        runTest {
+
+            coEvery {
+                registerUserUseCase(any())
+            } returns Result.failure(
+                Exception("404 Not Found")
+            )
+
+            viewModel.event.test {
+
+                viewModel.registerUser()
+
+                assertEquals(
+                    RegisterUiEvent.ShowError(
+                        "404 Not Found"
+                    ),
+                    awaitItem()
+                )
+            }
+        }
+
+    // HTTP 500 Error
+    @Test
+    fun `should emit error event when server returns 500`() =
+        runTest {
+
+            coEvery {
+                registerUserUseCase(any())
+            } returns Result.failure(
+                Exception("500 Internal Server Error")
+            )
+
+            viewModel.event.test {
+
+                viewModel.registerUser()
+
+                assertEquals(
+                    RegisterUiEvent.ShowError(
+                        "500 Internal Server Error"
+                    ),
+                    awaitItem()
+                )
+            }
+        }
+
+    // Check after successful registration event should emit and change loading state
+    @Test
+    fun `should emit navigate event after successful registration`() =
+        runTest {
+
+            val result = RegisterResult(
+                id = 1,
+                success = true,
+                responseCode = "00",
+                responseMessage = "Success"
+            )
+
+            coEvery {
+                registerUserUseCase(any())
+            } returns Result.success(result)
+
+            viewModel.onFullNameChange("Akshay")
+            viewModel.onEmailChange("akshay@gmail.com")
+            viewModel.onMobileChanged("1234567890")
+            viewModel.onPasswordChange("Akshay@21")
+
+            viewModel.event.test {
+
+                viewModel.registerUser()
+
+                assertEquals(
+                    RegisterUiEvent.ShowSuccess("Success"),
+                    awaitItem()
+                )
 
                 assertEquals(
                     RegisterUiEvent.NavigateToOtp,
                     awaitItem()
                 )
-
-                cancelAndConsumeRemainingEvents()
             }
         }
+
+    // Check after failed registration event  should emit and change loading state
+    @Test
+    fun `should emit navigate event after failed registration`() =
+        runTest {
+
+            val result = RegisterResult(
+                id = 0,
+                success = false,
+                responseCode = "01",
+                responseMessage = "Failed"
+            )
+
+            coEvery {
+                registerUserUseCase(any())
+            } returns Result.success(result)
+
+            viewModel.onFullNameChange("Akshay")
+            viewModel.onEmailChange("akshay@gmail.com")
+            viewModel.onMobileChanged("1234567890")
+            viewModel.onPasswordChange("Akshay@21")
+
+            viewModel.event.test {
+
+                viewModel.registerUser()
+
+                assertEquals(
+                    RegisterUiEvent.ShowError("Failed"),
+                    awaitItem()
+                )
+
+            }
+        }
+
 
 }

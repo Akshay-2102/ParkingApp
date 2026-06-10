@@ -6,7 +6,7 @@ import javax.inject.Inject
 class ClearUsersUseCase @Inject constructor(
     private val repository: RegistrationRepository
 ) {
-    suspend operator fun invoke() {
+   /* suspend operator fun invoke() {
         repository.clearUsers()
-    }
+    }*/
 }

@@ -55,9 +55,16 @@ class PreferencesManager @Inject constructor(
         putBoolean(SecureKeys.KEY_APP_LAUNCH_FIRST_TIME, value)
     }
 
-    fun getOnboardingCompleted(): Boolean? {
+    fun getOnboardingCompleted(): Boolean {
         return getBoolean(SecureKeys.KEY_APP_LAUNCH_FIRST_TIME)
+    }
 
+    fun setRegistrationCompleted(value: Boolean) {
+        putBoolean(SecureKeys.KEY_USER_REGISTER, value)
+    }
+
+    fun getRegistrationCompleted(): Boolean {
+        return getBoolean(SecureKeys.KEY_USER_REGISTER)
     }
 
 }

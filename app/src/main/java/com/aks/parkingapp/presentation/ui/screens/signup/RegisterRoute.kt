@@ -40,6 +40,13 @@ fun RegisterRoute(
                         message = event.message
                     )
                 }
+
+                is RegisterUiEvent.ShowSuccess -> {
+                    snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+
             }
         }
     }

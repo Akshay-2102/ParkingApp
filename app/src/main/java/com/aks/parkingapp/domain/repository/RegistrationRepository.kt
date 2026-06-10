@@ -8,17 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface RegistrationRepository {
 
-
     suspend fun registerUser(
         request: RegisterRequest
     ): Result<RegisterResult>
-
-    suspend fun registerUser(
-        user: User
-    )
-
-    fun getUsers(): Flow<List<User>>
-
-    suspend fun clearUsers()
 
 }

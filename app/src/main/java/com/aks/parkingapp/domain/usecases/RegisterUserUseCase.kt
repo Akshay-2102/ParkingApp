@@ -10,13 +10,6 @@ import javax.inject.Inject
 class RegisterUserUseCase @Inject constructor(
     private val repository: RegistrationRepository
 ) {
-
-    suspend operator fun invoke(
-        user: User
-    ) {
-        repository.registerUser(user)
-    }
-
     // Api call
     suspend operator fun invoke(
         request: RegisterRequest

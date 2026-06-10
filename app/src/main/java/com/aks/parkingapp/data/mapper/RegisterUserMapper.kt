@@ -20,7 +20,8 @@ fun RegisterResponseDTO.toRegisterResult(): RegisterResult {
 
     return RegisterResult(
         id = id ?: 0,
-        message = message ?: "",
+        responseMessage = responseMessage ?: "",
+        responseCode = responseCode ?: "",
         success = success ?: false
     )
 }

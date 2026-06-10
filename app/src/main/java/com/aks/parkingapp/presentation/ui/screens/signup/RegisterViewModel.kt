@@ -1,5 +1,6 @@
 package com.aks.parkingapp.presentation.ui.screens.signup
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,8 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
+    private val sharedPreferences: SharedPreferences,
     private val registerUserUseCase: RegisterUserUseCase,
-    private val clearUsersUseCase: ClearUsersUseCase
 ) : ViewModel() {
 
     // --------------------------------
@@ -107,8 +108,6 @@ class RegisterViewModel @Inject constructor(
     }
 
 
-
-
     // --------------------------------
     // Register User
     // --------------------------------
@@ -130,7 +129,7 @@ class RegisterViewModel @Inject constructor(
                     .random()
                     .toString()
 
-                clearUsersUseCase()
+              //  clearUsersUseCase()
 
                 val user = User(
                  _uiState.value.mobileNumber,
@@ -156,11 +155,26 @@ class RegisterViewModel @Inject constructor(
 
                 result.onSuccess { response ->
 
-                    Log.d("RegViewModel",response.message)
+                    if (response.responseCode == "00") {
 
-                    _event.emit(
-                        RegisterUiEvent.NavigateToOtp
-                    )
+
+
+                        _event.emit(
+                            RegisterUiEvent.ShowSuccess(
+                                response.responseMessage ?: "Success"
+                            )
+                        )
+
+                        _event.emit(
+                            RegisterUiEvent.NavigateToOtp
+                        )
+                    }else{
+                        _event.emit(
+                            RegisterUiEvent.ShowError(
+                                response.responseMessage ?: "Error"
+                            )
+                        )
+                    }
 
                 }.onFailure {
 
