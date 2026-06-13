@@ -1,6 +1,7 @@
-package com.aks.parkingapp.presentation.ui.screens.signup
+package com.aks.parkingapp.presentation.ui.screens.register
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -42,6 +43,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -80,9 +82,22 @@ fun RegisterScreen(
     onMobileChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onConfirmPasswordChanged: (String) -> Unit,
-    snackbarHostState: SnackbarHostState,
+    snackBarHostState: SnackbarHostState,
     onRegisterClick: () -> Unit
 ) {
+
+    DisposableEffect(Unit) {
+
+        onDispose {
+
+            Log.d(
+                "SCREEN",
+                "Register disposed"
+            )
+        }
+    }
+
+
     val buttonAlpha by animateFloatAsState(
         targetValue = if (uiState.isValidMobile) 1f else 0.5f,
         label = ""
@@ -127,26 +142,20 @@ fun RegisterScreen(
 
             SnackbarHost(
 
-                hostState = snackbarHostState
+                hostState = snackBarHostState
 
             ) { snackbarData ->
 
                 Card(
-
                     shape = RoundedCornerShape(12.dp),
-
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.Red
+                        containerColor = if (snackbarData.visuals.message.contains("00")) Color.Green else Color.Red
                     )
-
                 ) {
 
                     Text(
-
-                        text = snackbarData.visuals.message,
-
+                        text = snackbarData.visuals.message.split("|")[1],
                         color = Color.White,
-
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -518,7 +527,7 @@ fun RegisterScreen(
 
                 onClick = {
                     onRegisterClick()
-                },
+                          },
 
                 enabled = uiState.isValidFullName &&
                           uiState.isValidEmail &&
@@ -569,7 +578,7 @@ fun RegisterPreview() {
         onMobileChanged = {},
         onPasswordChanged = {},
         onConfirmPasswordChanged = {},
-        snackbarHostState = SnackbarHostState(),
+        snackBarHostState = SnackbarHostState(),
         onRegisterClick = {}
 
     )

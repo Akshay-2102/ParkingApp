@@ -99,6 +99,11 @@ dependencies {
     // ---------- Secure CRYPTO ----------
     implementation(libs.androidx.security.crypto)
 
+    // ---------- LEAK CANARY ----------
+    debugImplementation(
+        libs.leakcanary.android
+    )
+
     // ---------- UNIT TEST ----------
     testImplementation(libs.junit)
 

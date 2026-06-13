@@ -1,6 +1,6 @@
 package com.aks.parkingapp.domain.model.register
 
-data class RegisterResult(
+data class RegisterResultModel(
     val id: Int?,
     val responseCode: String?,
     val responseMessage: String?,

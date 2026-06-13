@@ -2,11 +2,11 @@ package com.aks.parkingapp.data.mapper
 
 import com.aks.parkingapp.data.remote.registerDTO.RegisterRequestDTO
 import com.aks.parkingapp.data.remote.registerDTO.RegisterResponseDTO
-import com.aks.parkingapp.domain.model.register.RegisterRequest
-import com.aks.parkingapp.domain.model.register.RegisterResult
+import com.aks.parkingapp.domain.model.register.RegisterRequestModel
+import com.aks.parkingapp.domain.model.register.RegisterResultModel
 
 
-fun RegisterRequest.toRegisterRequestDTO(): RegisterRequestDTO {
+fun RegisterRequestModel.toRegisterRequestDTO(): RegisterRequestDTO {
     return RegisterRequestDTO(
         name = name,
         email = email,
@@ -16,9 +16,9 @@ fun RegisterRequest.toRegisterRequestDTO(): RegisterRequestDTO {
 }
 
 
-fun RegisterResponseDTO.toRegisterResult(): RegisterResult {
+fun RegisterResponseDTO.toRegisterResult(): RegisterResultModel {
 
-    return RegisterResult(
+    return RegisterResultModel(
         id = id ?: 0,
         responseMessage = responseMessage ?: "",
         responseCode = responseCode ?: "",

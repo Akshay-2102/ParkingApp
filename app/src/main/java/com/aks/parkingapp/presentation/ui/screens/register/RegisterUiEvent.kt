@@ -1,8 +1,8 @@
-package com.aks.parkingapp.presentation.ui.screens.signup
+package com.aks.parkingapp.presentation.ui.screens.register
 
 sealed class RegisterUiEvent {
 
-    data object NavigateToOtp : RegisterUiEvent()
+    data object NavigateToLogin : RegisterUiEvent()
 
     data class ShowSuccess(
         val message: String

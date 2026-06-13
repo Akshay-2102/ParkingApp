@@ -1,4 +1,4 @@
-package com.aks.parkingapp.presentation.ui.screens.signup
+package com.aks.parkingapp.presentation.ui.screens.register
 
 data class RegisterUiState(
     val fullName: String = "",

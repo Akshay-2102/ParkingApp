@@ -1,5 +1,7 @@
 package com.aks.parkingapp.data.remote
 
+import com.aks.parkingapp.data.remote.loginDTO.LoginRequestDTO
+import com.aks.parkingapp.data.remote.loginDTO.LoginResponseDTO
 import com.aks.parkingapp.data.remote.registerDTO.RegisterRequestDTO
 import com.aks.parkingapp.data.remote.registerDTO.RegisterResponseDTO
 import com.aks.parkingapp.utils.Constants
@@ -13,5 +15,10 @@ interface ApiService {
         @Body request: RegisterRequestDTO
     ): RegisterResponseDTO
 
+
+    @POST(Constants.LOGIN)
+    suspend fun loginUser(
+        @Body request: LoginRequestDTO
+    ): LoginResponseDTO
 
 }

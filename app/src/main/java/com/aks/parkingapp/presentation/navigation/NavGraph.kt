@@ -5,18 +5,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.aks.parkingapp.presentation.ui.screens.HomeScreen
 import com.aks.parkingapp.presentation.ui.screens.LoginScreen
-import com.aks.parkingapp.presentation.ui.screens.signup.RegisterRoute
-import com.aks.parkingapp.presentation.ui.screens.signup.RegisterScreen
+import com.aks.parkingapp.presentation.ui.screens.login.LoginRoute
+import com.aks.parkingapp.presentation.ui.screens.register.RegisterRoute
 import com.aks.parkingapp.presentation.ui.screens.splash.SplashScreen
-import com.aks.parkingapp.presentation.ui.screens.validateOTP.ValidateOTPScreen
-import com.aks.parkingapp.utils.Constants
 
 @Composable
 fun AppNavGraph() {
@@ -47,35 +43,13 @@ fun AppNavGraph() {
         }
 
         composable(Routes.REGISTER) {
-            //RegisterScreen(navController)
             RegisterRoute(navController)
         }
 
-        composable(Routes.VERIFY_OTP) {
-            ValidateOTPScreen(
-                navController = navController
-            )
-        }
-
-        /*composable(Routes.VERIFY_OTP,
-            arguments = listOf(
-            navArgument(Constants.MOBILE_NO) {
-                type = NavType.StringType
-            }
-        )) { backStackEntry ->
-
-            val mobileNo =
-                backStackEntry.arguments?.getString(Constants.MOBILE_NO) ?: ""
-
-            ValidateOTPScreen(
-                navController = navController,
-                mobileNo = mobileNo
-            )
-        }*/
-
         composable(Routes.LOGIN) {
-            LoginScreen(navController)
+            LoginRoute(navController)
         }
+
         composable(Routes.HOME) {
             HomeScreen(navController)
         }

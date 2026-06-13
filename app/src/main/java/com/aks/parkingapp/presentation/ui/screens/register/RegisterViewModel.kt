@@ -1,13 +1,10 @@
-package com.aks.parkingapp.presentation.ui.screens.signup
+package com.aks.parkingapp.presentation.ui.screens.register
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aks.parkingapp.data.remote.registerDTO.RegisterRequestDTO
 import com.aks.parkingapp.domain.model.User
-import com.aks.parkingapp.domain.model.register.RegisterRequest
-import com.aks.parkingapp.domain.usecases.ClearUsersUseCase
+import com.aks.parkingapp.domain.model.register.RegisterRequestModel
 import com.aks.parkingapp.domain.usecases.RegisterUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -110,7 +107,6 @@ class RegisterViewModel @Inject constructor(
     // --------------------------------
     // Register User
     // --------------------------------
-
     fun registerUser() {
 
         viewModelScope.launch {
@@ -124,23 +120,7 @@ class RegisterViewModel @Inject constructor(
                     )
                 }
 
-                val otp = (100000..999999)
-                    .random()
-                    .toString()
-
-              //  clearUsersUseCase()
-
-                val user = User(
-                 _uiState.value.mobileNumber,
-                 otp,
-                false)
-
-              /*  registerUserUseCase(
-                    user
-                )*/
-
-                //@todo Api call for testing
-                val reqRegister = RegisterRequest(
+                val reqRegister = RegisterRequestModel(
                     _uiState.value.fullName,
                     _uiState.value.emailAddress,
                     _uiState.value.mobileNumber,
@@ -156,8 +136,6 @@ class RegisterViewModel @Inject constructor(
 
                     if (response.responseCode == "00") {
 
-
-
                         _event.emit(
                             RegisterUiEvent.ShowSuccess(
                                 response.responseMessage ?: "Success"
@@ -165,7 +143,7 @@ class RegisterViewModel @Inject constructor(
                         )
 
                         _event.emit(
-                            RegisterUiEvent.NavigateToOtp
+                            RegisterUiEvent.NavigateToLogin
                         )
                     }else{
                         _event.emit(
@@ -193,7 +171,7 @@ class RegisterViewModel @Inject constructor(
                 }
 
               /*  _event.emit(
-                    RegisterUiEvent.NavigateToOtp
+                    RegisterUiEvent.NavigateToLogin
                 )*/
 
             } catch (e: Exception) {

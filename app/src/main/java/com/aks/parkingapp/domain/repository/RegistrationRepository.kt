@@ -1,15 +1,12 @@
 package com.aks.parkingapp.domain.repository
 
-import com.aks.parkingapp.data.remote.registerDTO.RegisterRequestDTO
-import com.aks.parkingapp.domain.model.User
-import com.aks.parkingapp.domain.model.register.RegisterRequest
-import com.aks.parkingapp.domain.model.register.RegisterResult
-import kotlinx.coroutines.flow.Flow
+import com.aks.parkingapp.domain.model.register.RegisterRequestModel
+import com.aks.parkingapp.domain.model.register.RegisterResultModel
 
 interface RegistrationRepository {
 
     suspend fun registerUser(
-        request: RegisterRequest
-    ): Result<RegisterResult>
+        request: RegisterRequestModel
+    ): Result<RegisterResultModel>
 
 }

@@ -3,25 +3,19 @@ package com.aks.parkingapp
 import app.cash.turbine.test
 import com.aks.parkingapp.data.mapper.toRegisterResult
 import com.aks.parkingapp.data.remote.registerDTO.RegisterResponseDTO
-import com.aks.parkingapp.domain.model.User
-import com.aks.parkingapp.domain.model.register.RegisterRequest
-import com.aks.parkingapp.domain.model.register.RegisterResult
+import com.aks.parkingapp.domain.model.register.RegisterRequestModel
+import com.aks.parkingapp.domain.model.register.RegisterResultModel
 import com.aks.parkingapp.domain.repository.RegistrationRepository
-import com.aks.parkingapp.domain.usecases.ClearUsersUseCase
 import com.aks.parkingapp.domain.usecases.RegisterUserUseCase
-import com.aks.parkingapp.presentation.ui.screens.signup.RegisterUiEvent
-import com.aks.parkingapp.presentation.ui.screens.signup.RegisterViewModel
+import com.aks.parkingapp.presentation.ui.screens.register.RegisterUiEvent
+import com.aks.parkingapp.presentation.ui.screens.register.RegisterViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import net.bytebuddy.matcher.ElementMatchers.any
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -100,14 +94,14 @@ class RegisterViewModelTest {
     @Test
     fun `invoke should call repository`() = runTest {
 
-        val request = RegisterRequest(
+        val request = RegisterRequestModel(
             name = "Akshay",
             email = "akshay@gmail.com",
             mobileNo = "1234567890",
             password = "123"
         )
 
-        val result = RegisterResult(
+        val result = RegisterResultModel(
             id = 1,
             success = true,
             responseCode = "00",
@@ -255,7 +249,7 @@ class RegisterViewModelTest {
     fun `should emit navigate event after successful registration`() =
         runTest {
 
-            val result = RegisterResult(
+            val result = RegisterResultModel(
                 id = 1,
                 success = true,
                 responseCode = "00",
@@ -281,7 +275,7 @@ class RegisterViewModelTest {
                 )
 
                 assertEquals(
-                    RegisterUiEvent.NavigateToOtp,
+                    RegisterUiEvent.NavigateToLogin,
                     awaitItem()
                 )
             }
@@ -292,7 +286,7 @@ class RegisterViewModelTest {
     fun `should emit navigate event after failed registration`() =
         runTest {
 
-            val result = RegisterResult(
+            val result = RegisterResultModel(
                 id = 0,
                 success = false,
                 responseCode = "01",

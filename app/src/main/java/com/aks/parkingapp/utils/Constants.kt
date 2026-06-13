@@ -6,10 +6,8 @@ object Constants {
 
     //Api
     const val REGISTER = "api/auth/register"
-    const val LOGIN = "login"
+    const val LOGIN = "api/auth/login"
     const val GET_USER = "users"
 
-    // Compose data pass keys
-    const val MOBILE_NO = "mobileNo"
 
 }

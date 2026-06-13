@@ -38,7 +38,7 @@ class SplashScreenViewModel @Inject constructor(
 
             _startDestination.value =
                 if (onBoardingCompleted && onRegistrationCompleted) {
-                    Routes.VERIFY_OTP
+                    Routes.LOGIN
                 }
                 else if (onBoardingCompleted){
                     Routes.REGISTER
