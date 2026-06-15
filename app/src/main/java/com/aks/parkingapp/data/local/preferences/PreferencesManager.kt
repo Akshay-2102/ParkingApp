@@ -25,7 +25,7 @@ class PreferencesManager @Inject constructor(
         key: String
     ): String? {
 
-        return prefs.getString(key, null)
+        return prefs.getString(key, "")
     }
 
     private fun putBoolean(
@@ -65,6 +65,15 @@ class PreferencesManager @Inject constructor(
 
     fun getRegistrationCompleted(): Boolean {
         return getBoolean(SecureKeys.KEY_USER_REGISTER)
+    }
+
+
+    fun setToken(value: String) {
+        putString(SecureKeys.KEY_TOKEN, value)
+    }
+
+    fun getToken(): String? {
+        return getString(SecureKeys.KEY_TOKEN)
     }
 
 }

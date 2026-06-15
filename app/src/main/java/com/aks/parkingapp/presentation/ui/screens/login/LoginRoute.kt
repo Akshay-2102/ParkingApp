@@ -1,5 +1,7 @@
 package com.aks.parkingapp.presentation.ui.screens.login
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +20,12 @@ fun LoginRoute(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ){
+
+    BackHandler {
+        // Handle back press
+        Log.d("BACK", "Back Pressed")
+    }
+
 
     val uiState by viewModel
         .uiState
@@ -66,7 +74,10 @@ fun LoginRoute(
 
     LoginScreen(
         uiState = uiState,
-        snackBarHostState = snackBarHostState
+        snackBarHostState = snackBarHostState,
+        onEmailChanged = {viewModel.onEmailChange(it)},
+        onPasswordChanged = {viewModel.onPasswordChange(it)},
+        onLoginClick ={ viewModel.loginUser()}
     )
 
 

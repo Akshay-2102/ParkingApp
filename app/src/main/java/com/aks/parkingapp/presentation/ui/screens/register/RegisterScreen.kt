@@ -1,7 +1,6 @@
 package com.aks.parkingapp.presentation.ui.screens.register
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -43,7 +42,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,21 +83,8 @@ fun RegisterScreen(
     snackBarHostState: SnackbarHostState,
     onRegisterClick: () -> Unit
 ) {
-
-    DisposableEffect(Unit) {
-
-        onDispose {
-
-            Log.d(
-                "SCREEN",
-                "Register disposed"
-            )
-        }
-    }
-
-
     val buttonAlpha by animateFloatAsState(
-        targetValue = if (uiState.isValidMobile) 1f else 0.5f,
+        targetValue = if (uiState.isValidFullName && uiState.isValidEmail && uiState.isValidMobile && uiState.isValidPassword && uiState.isPasswordMatched) 1f else 0.5f,
         label = ""
     )
 

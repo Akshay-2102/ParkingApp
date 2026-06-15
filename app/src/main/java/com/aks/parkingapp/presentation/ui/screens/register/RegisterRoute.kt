@@ -1,5 +1,7 @@
 package com.aks.parkingapp.presentation.ui.screens.register
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +19,12 @@ fun RegisterRoute(
     navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
+
+    BackHandler {
+        // Handle back press
+        Log.d("BACK", "Back Pressed")
+    }
+
 
     val uiState by viewModel
         .uiState

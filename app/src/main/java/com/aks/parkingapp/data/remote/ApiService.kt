@@ -4,8 +4,11 @@ import com.aks.parkingapp.data.remote.loginDTO.LoginRequestDTO
 import com.aks.parkingapp.data.remote.loginDTO.LoginResponseDTO
 import com.aks.parkingapp.data.remote.registerDTO.RegisterRequestDTO
 import com.aks.parkingapp.data.remote.registerDTO.RegisterResponseDTO
+import com.aks.parkingapp.data.remote.userDetailsDTO.UserDetailsResponseDTO
 import com.aks.parkingapp.utils.Constants
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
@@ -20,5 +23,10 @@ interface ApiService {
     suspend fun loginUser(
         @Body request: LoginRequestDTO
     ): LoginResponseDTO
+
+    @GET(Constants.LOGIN)
+    suspend fun getUserDetails(
+        @Header("Authorization") token: String
+    ): UserDetailsResponseDTO
 
 }

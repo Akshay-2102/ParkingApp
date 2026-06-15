@@ -2,17 +2,20 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.aks.parkingapp"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.aks.parkingapp"
         minSdk = 25
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -38,9 +41,6 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 }
 
@@ -79,7 +79,7 @@ dependencies {
     // ---------- ROOM ----------
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     // ---------- NETWORK ----------
     implementation(libs.retrofit)
@@ -99,6 +99,13 @@ dependencies {
     // ---------- Secure CRYPTO ----------
     implementation(libs.androidx.security.crypto)
 
+    // ---------- FCM --------------------
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
+
+    // ---------- FCM Analytics ----------
+    implementation(libs.firebase.analytics)
+
     // ---------- LEAK CANARY ----------
     debugImplementation(
         libs.leakcanary.android
@@ -115,19 +122,9 @@ dependencies {
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.navigation.testing)
 
-    testImplementation(
-        "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
-    )
-
-    testImplementation(
-        "app.cash.turbine:turbine:1.0.0"
-    )
-
-    testImplementation(
-        "io.mockk:mockk:1.13.8"
-    )
-
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.mockk)
     testImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.room.testing)
 

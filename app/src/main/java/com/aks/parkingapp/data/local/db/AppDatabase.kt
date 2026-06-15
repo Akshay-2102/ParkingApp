@@ -7,7 +7,7 @@ import com.aks.parkingapp.data.local.dao.VehicleDao
 import com.aks.parkingapp.data.local.entity.UserEntity
 import com.aks.parkingapp.data.local.entity.VehicleEntity
 
-@Database(entities = [UserEntity::class, VehicleEntity::class], version = 1)
+@Database(entities = [UserEntity::class, VehicleEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun vehicleDao(): VehicleDao
     abstract fun userDao(): UserDao

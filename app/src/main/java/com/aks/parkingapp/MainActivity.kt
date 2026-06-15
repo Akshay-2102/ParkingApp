@@ -2,6 +2,7 @@ package com.aks.parkingapp
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import com.aks.parkingapp.presentation.navigation.AppNavGraph
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 @AndroidEntryPoint
@@ -24,6 +26,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // FCM Notification token
+        FirebaseMessaging.getInstance()
+            .token
+            .addOnSuccessListener { token ->
+
+                Log.d(
+                    "FCM_TOKEN",
+                    token
+                )
+            }
+
         setContent {
             ParkingAppTheme {
                 SetStatusBarColor()
