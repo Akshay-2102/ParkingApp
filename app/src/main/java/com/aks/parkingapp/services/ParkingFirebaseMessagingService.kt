@@ -29,6 +29,18 @@ class ParkingFirebaseMessagingService :
 
         super.onMessageReceived(message)
 
+        message.data["ParkingId"]?.let {
+            Log.d(
+                "FCM_MESSAGE",
+                it
+            )
+        }.also {
+            Log.d(
+                "FCM_MESSAGE",
+                "ALSO Check"
+            )
+        }
+
         val title =
             message.notification?.title ?: ""
 

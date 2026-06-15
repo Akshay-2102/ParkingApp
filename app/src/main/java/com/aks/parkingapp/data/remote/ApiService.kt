@@ -24,7 +24,7 @@ interface ApiService {
         @Body request: LoginRequestDTO
     ): LoginResponseDTO
 
-    @GET(Constants.LOGIN)
+    @GET(Constants.GET_USER_DETAILS)
     suspend fun getUserDetails(
         @Header("Authorization") token: String
     ): UserDetailsResponseDTO

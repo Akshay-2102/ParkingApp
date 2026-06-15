@@ -105,7 +105,7 @@ class RegisterViewModel @Inject constructor(
 
 
     // --------------------------------
-    // Register User
+    // Register UserDTO
     // --------------------------------
     fun registerUser() {
 

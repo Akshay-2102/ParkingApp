@@ -16,9 +16,13 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Email
@@ -68,10 +72,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.aks.parkingapp.R
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 
 @SuppressLint("SuspiciousIndentation")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RegisterScreen(
     uiState: RegisterUiState,
@@ -120,6 +126,13 @@ fun RegisterScreen(
         FocusRequester()
     }
 
+    val bringIntoViewRequester = remember {
+        BringIntoViewRequester()
+    }
+
+    val keyboardController =
+        LocalSoftwareKeyboardController.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
 
@@ -164,6 +177,9 @@ fun RegisterScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
                 .navigationBarsPadding()
+                .verticalScroll(
+                    rememberScrollState()
+                )
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -212,7 +228,10 @@ fun RegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .focusRequester(nameFocusRequester),
+                    .focusRequester(nameFocusRequester)
+                    .bringIntoViewRequester(
+                        bringIntoViewRequester
+                    ),
                 isError = uiState.fullName.isNotEmpty() &&
                         !uiState.isValidFullName
             )
@@ -260,7 +279,10 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth()
                     .height(56.dp)
-                    .focusRequester(emailFocusRequester),
+                    .focusRequester(emailFocusRequester)
+                    .bringIntoViewRequester(
+                        bringIntoViewRequester
+                    ),
                 isError = uiState.emailAddress.isNotEmpty() &&
                         !uiState.isValidEmail
             )
@@ -309,7 +331,10 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth()
                     .height(56.dp)
-                    .focusRequester(mobileFocusRequester),
+                    .focusRequester(mobileFocusRequester)
+                    .bringIntoViewRequester(
+                        bringIntoViewRequester
+                    ),
                 isError = uiState.mobileNumber.isNotEmpty() &&
                         !uiState.isValidMobile
             )
@@ -381,7 +406,10 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth()
                     .height(56.dp)
-                    .focusRequester(passwordFocusRequester),
+                    .focusRequester(passwordFocusRequester)
+                    .bringIntoViewRequester(
+                        bringIntoViewRequester
+                    ),
                 isError = uiState.password.isNotEmpty() &&
                         !uiState.isValidPassword
             )
@@ -450,7 +478,10 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.fillMaxWidth()
                     .height(56.dp)
-                    .focusRequester(confirmPasswordFocusRequester),
+                    .focusRequester(confirmPasswordFocusRequester)
+                    .bringIntoViewRequester(
+                        bringIntoViewRequester
+                    ),
                 isError = uiState.confirmPassword.isNotEmpty() &&
                         !uiState.isPasswordMatched
             )
@@ -511,6 +542,7 @@ fun RegisterScreen(
             Button(
 
                 onClick = {
+                    keyboardController?.hide()
                     onRegisterClick()
                           },
 

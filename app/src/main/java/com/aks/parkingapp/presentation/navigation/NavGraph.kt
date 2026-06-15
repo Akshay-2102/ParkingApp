@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.aks.parkingapp.presentation.ui.screens.HomeScreen
-import com.aks.parkingapp.presentation.ui.screens.LoginScreen
+import com.aks.parkingapp.presentation.ui.screens.home.HomeRoute
+import com.aks.parkingapp.presentation.ui.screens.home.HomeScreen
 import com.aks.parkingapp.presentation.ui.screens.login.LoginRoute
 import com.aks.parkingapp.presentation.ui.screens.register.RegisterRoute
 import com.aks.parkingapp.presentation.ui.screens.splash.SplashScreen
@@ -51,7 +51,7 @@ fun AppNavGraph() {
         }
 
         composable(Routes.HOME) {
-            HomeScreen(navController)
+            HomeRoute(navController)
         }
 
 

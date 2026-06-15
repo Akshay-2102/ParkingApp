@@ -2,12 +2,12 @@ package com.aks.parkingapp.utils
 
 object Constants {
 
-    const val BASE_URL = "http://192.168.0.100:3000/"
+    const val BASE_URL = "http://192.168.0.104:3000/"
 
     //Api
     const val REGISTER = "api/auth/register"
     const val LOGIN = "api/auth/login"
-    const val GET_USER = "users"
+    const val GET_USER_DETAILS = "api/user/details"
 
 
 }

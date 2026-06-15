@@ -8,7 +8,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,6 +56,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -95,6 +98,9 @@ fun LoginScreen(
     val passwordFocusRequester = remember {
         FocusRequester()
     }
+
+    val keyboardController =
+        LocalSoftwareKeyboardController.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -295,6 +301,8 @@ fun LoginScreen(
             Button(
 
                 onClick = {
+
+                    keyboardController?.hide()
                     onLoginClick()
                 },
 
@@ -334,8 +342,45 @@ fun LoginScreen(
 
 
         }
+    }
 
+    if (uiState.isLoading) {
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Color.Black.copy(alpha = 0.3f)
+                ) .clickable(
+                    indication = null,
+                    interactionSource = remember {
+                        MutableInteractionSource()
+                    }
+                ) {
+                    // consume all clicks
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+            Card(
+                shape = RoundedCornerShape(12.dp)
+            ) {
+
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    CircularProgressIndicator()
+
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
+
+                    Text("Please wait...")
+                }
+            }
+        }
     }
 }
 

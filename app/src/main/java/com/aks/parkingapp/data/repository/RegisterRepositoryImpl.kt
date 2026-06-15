@@ -35,21 +35,21 @@ class RegisterRepositoryImpl @Inject constructor(
     }
 
    /* override suspend fun registerUser(
-        user: User
+        userDTO: UserDTO
     ) {
 
         delay(3000)
 
         userDao.insertUser(
             UserEntity(
-                mobileNumber = user.mobileNumber,
-                otp = user.otp,
-                isSignupCompleted = user.isSignupCompleted
+                mobileNumber = userDTO.mobileNumber,
+                otp = userDTO.otp,
+                isSignupCompleted = userDTO.isSignupCompleted
             )
         )
     }
 
-    override fun getUsers(): Flow<List<User>> {
+    override fun getUsers(): Flow<List<UserDTO>> {
 
         return userDao.getUsers()
             .map { users ->

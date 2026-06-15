@@ -60,7 +60,7 @@ class LoginViewModel @Inject constructor(
 
 
     // --------------------------------
-    // Login User
+    // Login UserDTO
     // --------------------------------
 
     fun loginUser(){

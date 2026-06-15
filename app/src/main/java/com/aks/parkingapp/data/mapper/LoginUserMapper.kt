@@ -15,8 +15,8 @@ fun LoginRequestModel.toLoginRequestDTO(): LoginRequestDTO {
 
 fun LoginResponseDTO.toLoginResult(): LoginResultModel {
     return LoginResultModel(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
+        accessToken = accessToken?: "",
+        refreshToken = refreshToken?: "",
         responseMessage = responseMessage,
         responseCode = responseCode,
         success = success
