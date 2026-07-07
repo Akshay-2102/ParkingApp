@@ -111,6 +111,9 @@ dependencies {
         libs.leakcanary.android
     )
 
+    // ---------- WORK MANAGER ---------
+    implementation(libs.androidx.work.runtime.ktx)
+
     // ---------- UNIT TEST ----------
     testImplementation(libs.junit)
 

@@ -1,8 +1,13 @@
 package com.aks.parkingapp.presentation.ui.screens.home
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.aks.parkingapp.domain.usecases.GetUserDetailsUseCase
+import com.aks.parkingapp.services.SyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +19,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel@Inject constructor(
+    application: Application,
      private val getUserDetailsUseCase: GetUserDetailsUseCase
-): ViewModel() {
+): AndroidViewModel(application) {
+
+    // Work manger call
+    fun startService(){
+        // One time request
+        val request = OneTimeWorkRequestBuilder<SyncWorker>().build()
+        WorkManager.getInstance(getApplication()).enqueue(request)
+    }
 
 
     // --------------------------------
