@@ -16,6 +16,7 @@ class SyncWorker(
 
         Log.d("WorkManager", "API Calling")
         delay(5000.milliseconds)
+        // Api call
         return Result.success()
     }
 

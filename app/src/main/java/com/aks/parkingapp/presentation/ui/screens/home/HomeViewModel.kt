@@ -23,6 +23,10 @@ class HomeViewModel@Inject constructor(
      private val getUserDetailsUseCase: GetUserDetailsUseCase
 ): AndroidViewModel(application) {
 
+    init {
+        startService()
+    }
+
     // Work manger call
     fun startService(){
         // One time request
